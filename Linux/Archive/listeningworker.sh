@@ -1,3 +1,5 @@
+## Set the Bash Variables
+ 
 serverUrl="https://my-octopus"   # The url of your Octous server
 thumbprint=""       # The thumbprint of your Octopus Server
 apiKey=""           # An Octopus Server api key with permission to add machines
@@ -7,6 +9,8 @@ workerPool=""    # The worker pool to register the Tentacle in
 configFilePath="/etc/octopus/default/tentacle-default.config"
 applicationPath="/home/Octopus/Applications/"
 
+# Adding Octopus Repo, Key and Installing the Tentacle/Worker
+
 arch="x64" 
 # arch="arm" # for Raspbian 32-bit
 # arch="arm64" # for 64-bit OS on ARM v7+ hardware
@@ -15,6 +19,8 @@ curl -L https://octopus.com/downloads/latest/Linux_${arch}TarGz/OctopusTentacle 
 
 mkdir /opt/octopus
 tar xvzf tentacle-linux_${arch}.tar.gz -C /opt/octopus
+
+## Configure the Tentacle
 
 /opt/octopus/tentacle/Tentacle create-instance --config "$configFilePath"
 /opt/octopus/tentacle/Tentacle new-certificate --if-blank
