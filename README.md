@@ -108,11 +108,9 @@ echo "Registering the Tentacle $name with server $serverUrl in environment $envi
 
 You would need to take the above and change it, so that you can register it to **octo1** and **octo2**
 
-Please see the changes in **bold**
-
 ```bash
-**server1Url="https:/octo1"   # The url of your Octous server**
-**server2Url="https:/octo2"   # The url of your Octous server**
+server1Url="https:/octo1"   # The url of your Octous server**
+server2Url="https:/octo2"   # The url of your Octous server**
 serverCommsPort=10943            # The communication port the Octopus Server is listening on (10943 by default)
 apiKey=""           # An Octopus Server api key with permission to add machines
 spaceName="" # The name of the space to register the Tentacle in
@@ -138,10 +136,10 @@ apt-get install tentacle
 /opt/octopus/tentacle/Tentacle create-instance --config "$configFilePath"
 /opt/octopus/tentacle/Tentacle new-certificate --if-blank
 /opt/octopus/tentacle/Tentacle configure --noListen True --reset-trust --app "$applicationPath"
-**echo "Registering the Tentacle $name with server $server1Url in environment $environment with role $role"
+echo "Registering the Tentacle $name with server $server1Url in environment $environment with role $role"
 /opt/octopus/tentacle/Tentacle register-with --server "$server1Url" --apiKey "$apiKey" --space "$spaceName" --name "$name" --env "$environment" --role "$role" --comms-style "TentacleActive" --server-comms-port $serverCommsPort
 echo "Registering the Tentacle $name with server $server2Url in environment $environment with role $role"
-/opt/octopus/tentacle/Tentacle register-with --server "$server2Url" --apiKey "$apiKey" --space "$spaceName" --name "$name" --env "$environment" --role "$role" --comms-style "TentacleActive" --server-comms-port $serverCommsPort**
+/opt/octopus/tentacle/Tentacle register-with --server "$server2Url" --apiKey "$apiKey" --space "$spaceName" --name "$name" --env "$environment" --role "$role" --comms-style "TentacleActive" --server-comms-port $serverCommsPort
 
 /opt/octopus/tentacle/Tentacle service --install --start
 ```
