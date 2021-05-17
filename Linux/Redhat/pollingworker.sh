@@ -1,3 +1,5 @@
+## Set the Bash Variables
+
 serverUrl="https://my-octopus"   # The url of your Octous server
 serverCommsPort=10943            # The communication port the Octopus Server is listening on (10943 by default)
 apiKey=""           # An Octopus Server api key with permission to add machines
@@ -7,8 +9,12 @@ workerPool="Default Worker Pool"    # The worker pool to register the Tentacle i
 configFilePath="/etc/octopus/default/tentacle-default.config"
 applicationPath="/home/Octopus/Applications/"
 
+# Adding Octopus Repo, Key and Installing the Tentacle/Worker
+
 curl https://rpm.octopus.com/tentacle.repo -o /etc/yum.repos.d/tentacle.repo
 yum install tentacle
+
+## Configure the Tentacle
 
 /opt/octopus/tentacle/Tentacle create-instance --config "$configFilePath"
 /opt/octopus/tentacle/Tentacle new-certificate --if-blank

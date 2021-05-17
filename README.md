@@ -28,6 +28,10 @@ Using **[register-with](https://octopus.com/docs/octopus-rest-api/tentacle.exe-c
 
 Please be careful as your outbound IP, may be different from your inbound IP and it's worth getting this information and specifying it in environments you don't own. 
 
+### Additional Dependencies
+
+This repo will not deal with additional dependencies required on your Linux or Windows Octopus Deployment targets. If you require .NET Core, for instance, then you will need to automate this or carry it out manually. 
+
 ### Administrative commands
 
 Every organization is different, and the examples provided here use [sudo](https://www.linux.com/tutorials/linux-101-introduction-sudo/). They are intended to demonstrate functionality. Ensure you comply with your company's security policies when you configure any user accounts and that your specific implementation matches your needs.
@@ -40,6 +44,8 @@ Some of the below will need Sudo access unless running from a secure shell.
 - Server 2012 R2
 - Server 2016
 - Server 2019
+
+For a full list of compatible OS versions, you can check our [Operating System Compatibility](https://octopus.com/docs/support/compatibility#operating-system-compatibility) doc.
 
 All of these use the same script and you can see them [here](/Windows/Server)
 

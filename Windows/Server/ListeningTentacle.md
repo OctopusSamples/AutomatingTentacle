@@ -1,7 +1,6 @@
 # Automating the Installation of the Octopus Tentacle
 choco install octopusdeploy.tentacle -y
 
-
 ## Set the PowerShell Variables
 $OctopusServer = "http://myoctopusurl"
 $OctopusServerThumbprint = ""
