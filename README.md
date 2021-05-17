@@ -17,7 +17,7 @@ By default, Octopus server listens on 10943 for Polling Tentacles/Workers connec
 ## Linux
 
 - [Redhat, Fedora & CentOS 7 and 8](/Linux/Redhat)
-- [Debian](/Linux/Debian) 
+- [Debian, Ubuntu, Mint, Kali](/Linux/Debian) 
 - [Archive](/Linux/Archive)
 
 ### Public IP's and Hostnames
@@ -64,3 +64,72 @@ Every organization is different, and the examples provided here elevated PowerSh
 Some of the below will need Sudo access unless running from a secure shell.
 
 For a full list of required permissions on Windows for the Octopus Tentacle please check [Running Tentacle under a specific user account](https://octopus.com/docs/infrastructure/deployment-targets/windows-targets/running-tentacle-under-a-specific-user-account)
+
+## Registering Polling Tentacle & Workers on HA Nodes
+
+If you are using Octopus High-Availability, and registering either a Polling Tentacle or Worker then you will need to do it to each node in your HA cluster. Please check out [Polling Tentacles with HA](https://octopus.com/docs/administration/high-availability/maintain/polling-tentacles-with-ha) as this explains the concept in full. 
+
+### Debian Example
+
+We're going to assume that you're registering the below:
+
+serverUrl="https://my-octopus"   # The url of your Octous server
+serverCommsPort=10943            # The communication port the Octopus Server is listening on (10943 by default)
+apiKey=""           # An Octopus Server api key with permission to add machines
+spaceName="" # The name of the space to register the Tentacle in
+name=$HOSTNAME      # The name of the Tentacle at is will appear in the Octopus portal
+environment=""  # The environment to register the Tentacle in
+role=""   # The role to assign to the Tentacle
+configFilePath="/etc/octopus/default/tentacle-default.config"
+applicationPath="/home/Octopus/Applications/"
+
+# Adding Octopus Repo, Key and Installing the Tentacle/Worker
+
+apt-key adv --fetch-keys https://apt.octopus.com/public.key
+add-apt-repository "deb https://apt.octopus.com/ stretch main"
+apt-get update
+apt-get install tentacle
+
+## Configure the Tentacle
+
+/opt/octopus/tentacle/Tentacle create-instance --config "$configFilePath"
+/opt/octopus/tentacle/Tentacle new-certificate --if-blank
+/opt/octopus/tentacle/Tentacle configure --noListen True --reset-trust --app "$applicationPath"
+echo "Registering the Tentacle $name with server $serverUrl in environment $environment with role $role"
+/opt/octopus/tentacle/Tentacle register-with --server "$serverUrl" --apiKey "$apiKey" --space "$spaceName" --name "$name" --env "$environment" --role "$role" --comms-style "TentacleActive" --server-comms-port $serverCommsPort
+/opt/octopus/tentacle/Tentacle service --install --start
+
+You would need to take the above and change it, so that you can register it to **octo1** and **octo2**
+
+Please see the changes in **bold**
+
+**server1Url="https:/octo1"   # The url of your Octous server**
+**server2Url="https:/octo2"   # The url of your Octous server**
+serverCommsPort=10943            # The communication port the Octopus Server is listening on (10943 by default)
+apiKey=""           # An Octopus Server api key with permission to add machines
+spaceName="" # The name of the space to register the Tentacle in
+name=$HOSTNAME      # The name of the Tentacle at is will appear in the Octopus portal
+environment=""  # The environment to register the Tentacle in
+role=""   # The role to assign to the Tentacle
+configFilePath="/etc/octopus/default/tentacle-default.config"
+applicationPath="/home/Octopus/Applications/"
+
+# Adding Octopus Repo, Key and Installing the Tentacle/Worker
+
+apt-key adv --fetch-keys https://apt.octopus.com/public.key
+add-apt-repository "deb https://apt.octopus.com/ stretch main"
+apt-get update
+apt-get install tentacle
+
+## Configure the Tentacle
+
+/opt/octopus/tentacle/Tentacle create-instance --config "$configFilePath"
+/opt/octopus/tentacle/Tentacle new-certificate --if-blank
+/opt/octopus/tentacle/Tentacle configure --noListen True --reset-trust --app "$applicationPath"
+echo "Registering the Tentacle $name with server $server1Url in environment $environment with role $role"
+/opt/octopus/tentacle/Tentacle register-with --server "$server1Url" --apiKey "$apiKey" --space "$spaceName" --name "$name" --env "$environment" --role "$role" --comms-style "TentacleActive" --server-comms-port $serverCommsPort
+echo "Registering the Tentacle $name with server $server2Url in environment $environment with role $role"
+/opt/octopus/tentacle/Tentacle register-with --server "$server2Url" --apiKey "$apiKey" --space "$spaceName" --name "$name" --env "$environment" --role "$role" --comms-style "TentacleActive" --server-comms-port $serverCommsPort
+
+/opt/octopus/tentacle/Tentacle service --install --start
+
