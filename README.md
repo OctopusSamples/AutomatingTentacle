@@ -121,7 +121,7 @@ configFilePath="/etc/octopus/default/tentacle-default.config"
 applicationPath="/home/Octopus/Applications/"
 ```
 
-# Adding Octopus Repo, Key and Installing the Tentacle/Worker
+#### Adding Octopus Repo, Key and Installing the Tentacle/Worker
 
 ```bash
 apt-key adv --fetch-keys https://apt.octopus.com/public.key
@@ -130,7 +130,7 @@ apt-get update
 apt-get install tentacle
 ```
 
-## Configure the Tentacle
+#### Configure the Tentacle
 
 ```bash
 /opt/octopus/tentacle/Tentacle create-instance --config "$configFilePath"
@@ -144,3 +144,60 @@ echo "Registering the Tentacle $name with server $server2Url in environment $env
 /opt/octopus/tentacle/Tentacle service --install --start
 ```
 
+## Running the scripts
+
+You will need to run these scripts either by using a Configuration Management tool like [Chef](https://www.chef.io/solutions/configuration-management) or [Puppet](https://puppet.com/). Alternatively, these can be run directly from the server whether it's Linux or Windows. Please note that these script will require administrative Powershell sessions or a Secure shell with Root access.
+
+### Variables explained
+
+For each of the scripts you will require a few things:
+
+- Server URL i.e https://myoctopusurl.company.com
+- Server thumbprint - You can get this by going to Configuration -> Thumbprint.
+- [An API key](https://octopus.com/docs/octopus-rest-api/how-to-create-an-api-key) - a Key used to authenticate with the Octopus Deploy API
+- A Space name - This is the space you are adding to the Infrastructure to. If you don't specify a Space, it will be added to your [Default Space](https://octopus.com/docs/administration/spaces#managing-spaces)
+- Name - This is the server name as it should appear in Octopus. i.e Prod-Web2
+- Environment - This is the environment you are adding the Infrastuture to. i.e Dev/Test/Production
+- [Target Roles](https://octopus.com/docs/getting-started/best-practices/environments-and-deployment-targets-and-roles#roles) - A target role is a way to tag your Infrastructure. i.e ProjectX-Web-Server
+- Server Comms Port - This is only required for Polling Tentacles, and this is the port used to accept inbound connections from Polling Tentacles and Workers. The default is 10943.
+
+### Adding an Infrastructure Service Account
+
+It's advisable to provision an Infrastructure account in Octopus Deploy and grant the minimum amount of permissions to add and update Infrastructure. 
+
+You may want an Infrastructure account that spans all Spaces, or you may want to have a Space Specific Infrastructure account that only has access to add and update Infrastructure in a single Space. We'd recommend deciding what is best and you can browse [System and Space permissions doc](https://octopus.com/docs/security/users-and-teams/system-and-space-permissions) to help you decide.
+
+To add the account in Octopus: 
+
+- Log in to Octopus with a priviliged account
+- Select Users
+- Select Add Users
+- Ensure the Service account box is ticked. This means the user can't login to the UI of Octopus.
+
+![Creating User](images/add-account.png)
+
+- Add **Infrastructure Team**. This is where you will make a choice on whether it's a System or Space level Team.
+
+![Adding Team](images/add-team.png)
+
+![Adding Environment Manager](images/environment-manager.png)
+
+- Add **Infrastructure Service Account** to the **Infrastructure Team**
+
+![Infrastructure Account in Infrastructure Team](images/infrastructure.png)
+
+### Generating an API Key
+
+- Browse to Configuration -> Users
+- Select the **Infrastructure Account**
+- Select **New API Key**
+- Input Purpose
+- Select Expiry (Generally keep this as low as you can, and we generally don't recommend **Never**)
+
+![API Key](images/api-key-expiry.png)
+
+![API Key Created](images/api-key.png)
+
+Copy the API Key and store it in a Password Manager or similar. I set this to expire in 180 days.
+
+![API Key](images/key.png)
