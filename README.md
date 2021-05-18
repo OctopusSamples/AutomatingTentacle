@@ -61,7 +61,7 @@ Please be careful as your outbound IP may be different from your inbound IP, and
 
 ### Windows administrative commands
 
-Every organization is different, and the examples provided here elevated PowerShell. They are intended to demonstrate functionality. Ensure you comply with your company's security policies when you configure any user accounts and that your specific implementation matches your needs.
+Every organization is different, and the examples provided here use elevated PowerShell. They are intended to demonstrate functionality. Ensure you comply with your company's security policies when you configure any user accounts and that your specific implementation matches your needs.
 
 For a complete list of required permissions on Windows for the Octopus Tentacle, please check [Running Tentacle under a specific user account](https://octopus.com/docs/infrastructure/deployment-targets/windows-targets/running-tentacle-under-a-specific-user-account)
 
@@ -110,8 +110,8 @@ echo "Registering the Tentacle $name with server $serverUrl in environment $envi
 You would need to take the above and change it so that you can register it to **octo1** and **octo2**
 
 ```bash
-server1Url="https:/octo1"   # The url of your Octous server**
-server2Url="https:/octo2"   # The url of your Octous server**
+server1Url="https:/octo1"   # The url of your Octous server
+server2Url="https:/octo2"   # The url of your Octous server
 serverCommsPort=10943            # The communication port the Octopus Server is listening on (10943 by default)
 apiKey=""           # An Octopus Server api key with permission to add machines
 spaceName="" # The name of the space to register the Tentacle in
