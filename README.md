@@ -1,38 +1,38 @@
 # AutomatingTentacle
 
-This repository contains automation scripts to install and configure Octopus Tentacle on different OS's. 
+This repository contains automation scripts to install and configure Octopus Tentacle on different OS's.
 
 ## Networking
 
-Each Operating System listed here, will have a polling and a listening tentacle option listed. 
+Each Operating System listed here, will have a polling and a listening tentacle option listed.
 
 ### Listening Tentacles/Workers
 
-By default, Octopus uses port 10933 for a Listening Tentacle and Listening Workers. The Octopus server connects directly or via a Proxy to an endpointing listening on 10933. You will need to add Port 10933 to the inbound firewall rules to the server, and allow the server to be connected over a private or public network. This may involve opening a port on a hardware load balancer or firewall. 
+By default, Octopus uses port 10933 for a Listening Tentacle and Listening Workers. The Octopus server connects directly or via a Proxy to an endpointing listening on 10933. You will need to add Port 10933 to the inbound firewall rules to the server, and allow the server to be connected over a private or public network. This may involve opening a port on a hardware load balancer or firewall.
 
 ### Polling Tentacles/Workers
 
-By default, Octopus server listens on 10943 for Polling Tentacles/Workers connections, or whatever the default is when you set up Octopus. On the Polling Tentacles/Workers, you will need to connect to this port. This may involve allowing outbound connections on your local server/endpoint. Additionally, you may need to allow non-default outbound connections on 10943. If you have a firewall blocking all traffic apart from Port 80/443 then you may need to configure your server to listen using [websockets](https://octopus.com/docs/infrastructure/deployment-targets/windows-targets/polling-tentacles-web-sockets). 
+By default, Octopus server listens on 10943 for Polling Tentacles/Workers connections, or whatever the default is when you set up Octopus. On the Polling Tentacles/Workers, you will need to connect to this port. This may involve allowing outbound connections on your local server/endpoint. Additionally, you may need to allow non-default outbound connections on 10943. If you have a firewall blocking all traffic apart from Port 80/443 then you may need to configure your server to listen using [websockets](https://octopus.com/docs/infrastructure/deployment-targets/windows-targets/polling-tentacles-web-sockets).
 
 ## Linux
 
 - [Redhat, Fedora & CentOS 7 and 8](/Linux/Redhat)
-- [Debian, Ubuntu, Mint, Kali](/Linux/Debian) 
+- [Debian, Ubuntu, Mint, Kali](/Linux/Debian)
 - [Archive](/Linux/Archive)
 
-### Public IP's and Hostnames
+### Linux Public IP's and Hostnames
 
-When registering Linux Targets and Workers, Octopus assumes that they are addressable using your local DNS. If you are dealing with public IPs or Hostnames, consider adding a  bash variable for the public IP or Hostname similar to **publicIp=$(curl -s https://ifconfig.info)**. 
+When registering Linux Targets and Workers, Octopus assumes that they are addressable using your local DNS. If you are dealing with public IPs or Hostnames, consider adding a  bash variable for the public IP or Hostname similar to publicIp=$(curl -s https://ifconfig.info).
 
 Using **[register-with](https://octopus.com/docs/octopus-rest-api/tentacle.exe-command-line/register-with.md)**, you can specify the IP or the public hostname.
 
-Please be careful as your outbound IP, may be different from your inbound IP and it's worth getting this information and specifying it in environments you don't own. 
+Please be careful as your outbound IP, may be different from your inbound IP and it's worth getting this information and specifying it in environments you don't own.
 
 ### Additional Dependencies
 
-This repo will not deal with additional dependencies required on your Linux or Windows Octopus Deployment targets. If you require .NET Core, for instance, then you will need to automate this or carry it out manually. 
+This repo will not deal with additional dependencies required on your Linux or Windows Octopus Deployment targets. If you require .NET Core, for instance, then you will need to automate this or carry it out manually.
 
-### Administrative commands
+### Linux administrative commands
 
 Every organization is different, and the examples provided here use [sudo](https://www.linux.com/tutorials/linux-101-introduction-sudo/). They are intended to demonstrate functionality. Ensure you comply with your company's security policies when you configure any user accounts and that your specific implementation matches your needs.
 
@@ -49,19 +49,17 @@ For a full list of compatible OS versions, you can check our [Operating System C
 
 All of these use the same script and you can see them [here](/Windows/Server)
 
-### Public IP's and Hostnames
+### Windows Public IP's and Hostnames
 
-When registering Windows Targets and Workers, Octopus assumes that they are addressable using your local DNS. If you are dealing with public IPs or Hostnames, consider adding a PowerShell variable for the public IP or Hostname similar to **$PublicIP = (Invoke-WebRequest myexternalip.com/raw).content**. 
+When registering Windows Targets and Workers, Octopus assumes that they are addressable using your local DNS. If you are dealing with public IPs or Hostnames, consider adding a PowerShell variable for the public IP or Hostname similar to **$PublicIP = (Invoke-WebRequest myexternalip.com/raw).content**.
 
 Using **[register-with](https://octopus.com/docs/octopus-rest-api/tentacle.exe-command-line/register-with.md)**, you can specify the IP or the public hostname.
 
-Please be careful as your outbound IP, may be different from your inbound IP and it's worth getting this information and specifying it in environments you don't own. 
+Please be careful as your outbound IP, may be different from your inbound IP and it's worth getting this information and specifying it in environments you don't own.
 
-### Administrative commands
+### Windows administrative commands
 
 Every organization is different, and the examples provided here elevated PowerShell. They are intended to demonstrate functionality. Ensure you comply with your company's security policies when you configure any user accounts and that your specific implementation matches your needs.
-
-Some of the below will need Sudo access unless running from a secure shell.
 
 For a full list of required permissions on Windows for the Octopus Tentacle please check [Running Tentacle under a specific user account](https://octopus.com/docs/infrastructure/deployment-targets/windows-targets/running-tentacle-under-a-specific-user-account)
 
@@ -105,6 +103,8 @@ echo "Registering the Tentacle $name with server $serverUrl in environment $envi
 /opt/octopus/tentacle/Tentacle register-with --server "$serverUrl" --apiKey "$apiKey" --space "$spaceName" --name "$name" --env "$environment" --role "$role" --comms-style "TentacleActive" --server-comms-port $serverCommsPort
 /opt/octopus/tentacle/Tentacle service --install --start
 ```
+
+### Debian HA Example
 
 You would need to take the above and change it, so that you can register it to **octo1** and **octo2**
 
@@ -152,7 +152,7 @@ You will need to run these scripts either by using a Configuration Management to
 
 For each of the scripts you will require a few things:
 
-- Server URL i.e https://myoctopusurl.company.com
+- Server URL i.e [https://myoctopusurl.company.com](https://myoctopusurl.company.com)
 - Server thumbprint - You can get this by going to Configuration -> Thumbprint.
 - [An API key](https://octopus.com/docs/octopus-rest-api/how-to-create-an-api-key) - a Key used to authenticate with the Octopus Deploy API
 - A Space name - This is the space you are adding to the Infrastructure to. If you don't specify a Space, it will be added to your [Default Space](https://octopus.com/docs/administration/spaces#managing-spaces)
@@ -163,11 +163,11 @@ For each of the scripts you will require a few things:
 
 ### Adding an Infrastructure Service Account
 
-It's advisable to provision an Infrastructure account in Octopus Deploy and grant the minimum amount of permissions to add and update Infrastructure. 
+It's advisable to provision an Infrastructure account in Octopus Deploy and grant the minimum amount of permissions to add and update Infrastructure.
 
 You may want an Infrastructure account that spans all Spaces, or you may want to have a Space Specific Infrastructure account that only has access to add and update Infrastructure in a single Space. We'd recommend deciding what is best and you can browse [System and Space permissions doc](https://octopus.com/docs/security/users-and-teams/system-and-space-permissions) to help you decide.
 
-To add the account in Octopus: 
+To add the account in Octopus:
 
 - Log in to Octopus with a priviliged account
 - Select Users
